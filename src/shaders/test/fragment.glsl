@@ -71,17 +71,88 @@ float sdfSphere(vec3 point, vec3 center, float radius)
     return distance(center, point) - radius;
 }
 
+vec4 sinWaveDoubleColor()
+{
+    vec3 bgColor = vec3(0.0134, 0.0737, 0.5947);
+    vec3 fgColor = vec3(0.9780, 0.5630, 0.0001);
+    vec3 blackColor = vec3(0.0);
+
+    // to show a wave we check the value of the sin func (tweaked to alter its shape)
+    // calculated in the x coordinate of the point against the y coordinate
+    float strength = (sin(2.0 * vUv.x) * (12.0 * sin(vUv.x))) / 20.0 - vUv.y + 0.4;
+
+    // points below the wave will have value 1
+    // points above the wave will have value 0
+    // this is because the strength value already is whether 0 or 1 due to the step function
+    float upOrDownSign = sign(step(0.0, strength));
+    // when 0 the color will have value bgColor, when 1 fgColor
+    // intermediate values aren't there since upOrDownSign variable cannot be equal to those
+    vec3 color = mix(bgColor, fgColor, upOrDownSign);
+
+    return vec4(color, 1.0);
+}
+
+vec4 sinWaveDoubleColorShadow()
+{
+    vec3 bgColor = vec3(0.0134, 0.0737, 0.5947);
+    vec3 fgColor = vec3(0.9000, 0.5000, 0.0);
+    vec3 blackColor = vec3(0.0);
+
+    // to show a wave we check the value of the sin func (tweaked to alter its shape)
+    // calculated in the x coordinate of the point against the y coordinate
+    float strength = (sin(2.0 * vUv.x) * (12.0 * sin(vUv.x))) / 20.0 - vUv.y + 0.4;
+
+    // points below the wave will have value 1
+    // points above the wave will have value 0
+    // this is because the strength value already is 0 or 1 due to the step function
+    float upOrDownSign = sign(step(0.0, strength));
+    // when 0 the color will have value bgColor, when 1 fgColor
+    // intermediate values aren't there since upOrDownSign variable cannot be equal to those
+    vec3 color = mix(bgColor, fgColor, upOrDownSign);
+
+    // fade the bg color to give a feeling of the presenceof a shadow
+    float bgAlpha = (1.0 - upOrDownSign)    // only do this operation for the bg color
+        * abs(strength)                     // convert to positive values the strength (that would be < 0 instead)
+        * 7.0 + 0.5;                        // adjust the intensity and the offset
+
+    return vec4(color, max(upOrDownSign, bgAlpha));
+}
+
+vec4 sinWaveDoubleColorShadowDepth()
+{
+    vec3 bgColor = vec3(0.0134, 0.0737, 0.5947);
+    vec3 fgColor = vec3(0.9000, 0.5000, 0.0);
+    vec3 blackColor = vec3(0.0);
+
+    // trim one vertical line at the start and one at the end
+    // in the background color
+    // sin is used to create a cycle and catch both start and end values
+    // the x coordinate (treated as an) angle is given an offset of 90 degrees
+    // so zeroes are at the extremes of the rendered square's length
+    // the step function is then used to clearly divide the different regions
+    bgColor = step(0.05, sin(vUv.x * PI)) * bgColor;
+
+    // to show a wave we check the value of the sin func (tweaked to alter its shape)
+    // calculated in the x coordinate of the point against the y coordinate
+    float strength = (sin(2.0 * vUv.x) * (12.0 * sin(vUv.x))) / 20.0 - vUv.y + 0.4;
+
+    // points below the wave will have value 1
+    // points above the wave will have value 0
+    // this is because the strength value already is 0 or 1 due to the step function
+    float upOrDownSign = sign(step(0.0, strength));
+    // when 0 the color will have value bgColor, when 1 fgColor
+    // intermediate values aren't there since upOrDownSign variable cannot be equal to those
+    vec3 color = mix(bgColor, fgColor, upOrDownSign);
+
+    // fade the bg color to give a feeling of the presenceof a shadow
+    float bgAlpha = (1.0 - upOrDownSign)    // only do this operation for the bg color
+        * abs(strength)                     // convert to positive values the strength (that would be < 0 instead)
+        * 7.0 + 0.5;                        // adjust the intensity and the offset
+
+    return vec4(color, max(upOrDownSign, bgAlpha));
+}
+
 void main()
 {
-    vec3 bgColor = vec3(0.0434, 0.0737, 0.5947);
-    vec3 fgColor = vec3(0.9780, 0.5630, 0.0);
-
-    // to show a wave we confront the value of the sin func (tweaked to alter its shape)
-    // calculated in the x coordinate of the point with the y coordinate
-    float strength = (sin(2.0 * vUv.x) * (12.0 * sin(vUv.x))) / 20.0 - vUv.y + 0.4;
-    // clear cut, do not fade
-    strength = step(0.0, strength);
-
-    float upOrDownSign = sign(strength);
-    gl_FragColor = vec4(vec3(strength) * fgColor, 1.0);
+    gl_FragColor = sinWaveDoubleColorShadowDepth();
 }
