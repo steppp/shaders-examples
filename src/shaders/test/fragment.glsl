@@ -62,6 +62,26 @@ float cnoise(vec2 P)
     return 2.3 * n_xy;
 }
 
+// SDF for a sphere:
+// - value > 0: outside the sphere
+// - value = 0: on the surface
+// - value < 0: inside the sphere
+float sdfSphere(vec3 point, vec3 center, float radius)
+{
+    return distance(center, point) - radius;
+}
+
 void main()
 {
+    vec3 bgColor = vec3(0.0434, 0.0737, 0.5947);
+    vec3 fgColor = vec3(0.9780, 0.5630, 0.0);
+
+    // to show a wave we confront the value of the sin func (tweaked to alter its shape)
+    // calculated in the x coordinate of the point with the y coordinate
+    float strength = (sin(2.0 * vUv.x) * (12.0 * sin(vUv.x))) / 20.0 - vUv.y + 0.4;
+    // clear cut, do not fade
+    strength = step(0.0, strength);
+
+    float upOrDownSign = sign(strength);
+    gl_FragColor = vec4(vec3(strength) * fgColor, 1.0);
 }
