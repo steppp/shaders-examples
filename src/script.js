@@ -2,8 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
-import testVertexShader from './shaders/test/vertex.glsl'
-import testFragmentShader from './shaders/test/fragment.glsl'
+import { Examples } from './examples'
 
 /**
  * Base
@@ -20,19 +19,7 @@ const scene = new THREE.Scene()
 /**
  * Test mesh
  */
-// Geometry
-const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
-
-// Material
-const material = new THREE.ShaderMaterial({
-  vertexShader: testVertexShader,
-  fragmentShader: testFragmentShader,
-  side: THREE.DoubleSide,
-  transparent: true,
-})
-
-// Mesh
-const mesh = new THREE.Mesh(geometry, material)
+const mesh = Examples.volcano;
 scene.add(mesh)
 
 /**
