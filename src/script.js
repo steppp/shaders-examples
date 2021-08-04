@@ -16,6 +16,10 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+// Axes helper
+const axesHelper = new THREE.AxesHelper(1)
+scene.add(axesHelper)
+
 /**
  * Test mesh
  */

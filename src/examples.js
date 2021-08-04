@@ -54,7 +54,8 @@ export const Examples = {
                 uVolcanoMouthRadius: {
                     value: 0.15
                 }
-            }
+            },
+            side: THREE.DoubleSide
         })
 
         // Mesh

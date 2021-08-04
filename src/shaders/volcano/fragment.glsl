@@ -69,15 +69,14 @@ float cnoise(vec2 P)
 // < 0: inside the circle
 float circleSdf(float radius, vec2 center, vec2 point)
 {
-    return clamp(
-        step(radius - distance(center, point), 0.0), 0.0,
-        1.0
-    );
+    return radius - distance(center, point);
 }
 
 void main()
 {
     float color = circleSdf(vVolcanoMouthRadius, vVolcanoCenter, vUv);
+    color = clamp(step(color, 0.0), 0.0, 1.0);
+    vec3 uvColor = mix(vec3(0.0), vec3(vUv, 0.3), color);
 
-    gl_FragColor = vec4(vec3(color), 1.0);
+    gl_FragColor = vec4(uvColor, 1.0);
 }
