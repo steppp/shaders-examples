@@ -124,10 +124,9 @@ void main()
     // apply some noise to simulate terrain irregularities
     for (float i = 1.0; i <= 3.0; i++)
     {
-        float noise = abs(cnoise(vec3(modelPosition.xz * 4.0 * i, distanceFromMouth * 0.1)) * 0.3) / i;
-        modelPosition.x -= modelPosition.x * noise;
-        modelPosition.y -= modelPosition.y * noise;
-        modelPosition.z -= modelPosition.z * noise;
+        modelPosition.x -= modelPosition.x * abs(cnoise(vec3(modelPosition.xz * 4.0 * i, distanceFromMouth * 0.1)) * 0.3) / i;
+        modelPosition.y -= modelPosition.y * abs(cnoise(vec3(modelPosition.xz * 4.0 * i, distanceFromMouth * 0.1)) * 0.3) / i;
+        modelPosition.z -= modelPosition.z * abs(cnoise(vec3(modelPosition.xz * 4.0 * i, distanceFromMouth * 0.1)) * 0.3) / i;
     }
     modelPosition.y *= .6;
 

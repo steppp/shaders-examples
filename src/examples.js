@@ -56,6 +56,7 @@ export const Examples = {
                 }
             },
             side: THREE.DoubleSide,
+            transparent: true,
             // wireframe: true
         })
 

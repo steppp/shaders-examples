@@ -76,7 +76,5 @@ void main()
 {
     float color = circleSdf(vVolcanoMouthRadius, vVolcanoCenter, vUv);
     color = clamp(step(color, 0.0), 0.0, 1.0);
-    vec3 uvColor = mix(vec3(0.0), vec3(vUv, 0.3), color);
-
-    gl_FragColor = vec4(uvColor, 1.0);
+    gl_FragColor = mix(vec4(0.0), vec4(0.2784, 0.1686, 0.0039, 1.0), color);
 }
