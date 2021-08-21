@@ -41,7 +41,7 @@ export const Examples = {
     })(),
     volcano: (() => {
         // Geometry
-        const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+        const geometry = new THREE.PlaneGeometry(1, 1, 128, 128)
 
         // Material
         const material = new THREE.ShaderMaterial({
@@ -55,7 +55,8 @@ export const Examples = {
                     value: 0.15
                 }
             },
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
+            // wireframe: true
         })
 
         // Mesh
